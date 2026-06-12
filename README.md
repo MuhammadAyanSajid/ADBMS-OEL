@@ -1,3 +1,4 @@
+
 # Advanced Database Management Systems (ADBMS) Final Project
 
 This repository contains the complete implementation suite and database scripts developed for the Advanced Database Management Systems (ADBMS) course at the University of Engineering and Technology, Lahore. The project is structured as a single flat directory containing six independent technical tasks spanning distributed systems, high availability, database indexing, query optimization, concurrency control, and analytical mining.
@@ -54,3 +55,31 @@ A database-connected Python ETL script that queries the Star Schema in SQL Serve
 Install the required packages using pip:
 ```bash
 pip install pandas mlxtend scikit-learn pyodbc
+```
+
+---
+
+## How to Execute the Tasks
+
+* **Task 1, 3, 5:** Run the individual Python scripts:
+  ```bash
+  python Task1.py
+  python Task3.py
+  python Task5.py
+  ```
+* **Task 2:** Refer to the instructions inside `Task2_Setup.txt` to spin up your three `mongod` nodes and initiate the replica set.
+* **Task 4:** Open SSMS, open `Task4.sql`, and execute the statements. Enable "Include Actual Execution Plan" to observe physical operator changes.
+* **Task 6:** 
+  1. Open SSMS and execute `Task6_Schema.sql` to build and populate the database.
+  2. Run the analytical mining script:
+     ```bash
+     python Task6.py
+     ```
+
+---
+
+## Authors
+* [**Muhammad Ayan Sajid**](https://github.com/MuhammadAyanSajid)
+* [**Muhammad Bilal**](https://github.com/Bilal-013) 
+* [**Shareen Asim**](linkedin.com/in/shareen-asim-9987a33a8)
+* [**Muhammad Husnain**](https://github.com/nexHus) 
