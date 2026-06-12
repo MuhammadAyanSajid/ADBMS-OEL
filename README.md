@@ -81,5 +81,5 @@ pip install pandas mlxtend scikit-learn pyodbc
 ## Authors
 * [**Muhammad Ayan Sajid**](https://github.com/MuhammadAyanSajid)
 * [**Muhammad Bilal**](https://github.com/Bilal-013) 
-* [**Shareen Asim**](linkedin.com/in/shareen-asim-9987a33a8)
+* [**Shareen Asim**](https://linkedin.com/in/shareen-asim-9987a33a8)
 * [**Muhammad Husnain**](https://github.com/nexHus) 
