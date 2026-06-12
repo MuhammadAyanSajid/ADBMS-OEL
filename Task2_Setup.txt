@@ -1,0 +1,87 @@
+================================================================================
+MongoDB 8.2 Replica Set Setup & High Availability Verification Instructions
+================================================================================
+
+This document outlines the step-by-step commands and verification queries used 
+to configure, initialize, and test the 3-node MongoDB Replica Set.
+
+--------------------------------------------------------------------------------
+Step 1: Create Data Folders
+--------------------------------------------------------------------------------
+Before launching the server instances, create three clean directories to house 
+the data files for each respective node. Run these commands in a standard 
+Windows Command Prompt (cmd.exe):
+
+mkdir "C:\Users\User\Documents\4th Semester\ADBMS Lab OEL\Task 2a"
+mkdir "C:\Users\User\Documents\4th Semester\ADBMS Lab OEL\Task 2b"
+mkdir "C:\Users\User\Documents\4th Semester\ADBMS Lab OEL\Task 2c"
+
+--------------------------------------------------------------------------------
+Step 2: Launch the mongod Processes (In Three Separate Terminal Windows)
+--------------------------------------------------------------------------------
+To bypass port binding conflicts with default MongoDB background services 
+occupying port 27017, the replica set members are assigned to ports 27018, 
+27019, and 27020. 
+
+Open three separate Command Prompt windows. Execute one command in each:
+
+Terminal Window 1 (Node 1):
+"C:\Program Files\MongoDB\Server\8.2\bin\mongod.exe" --replSet rs0 --port 27018 --dbpath "C:\Users\User\Documents\4th Semester\ADBMS Lab OEL\Task 2a" --bind_ip localhost
+
+Terminal Window 2 (Node 2):
+"C:\Program Files\MongoDB\Server\8.2\bin\mongod.exe" --replSet rs0 --port 27019 --dbpath "C:\Users\User\Documents\4th Semester\ADBMS Lab OEL\Task 2b" --bind_ip localhost
+
+Terminal Window 3 (Node 3):
+"C:\Program Files\MongoDB\Server\8.2\bin\mongod.exe" --replSet rs0 --port 27020 --dbpath "C:\Users\User\Documents\4th Semester\ADBMS Lab OEL\Task 2c" --bind_ip localhost
+
+--------------------------------------------------------------------------------
+Step 3: Connect and Initialize the Replica Set (Window 4)
+--------------------------------------------------------------------------------
+Open a fourth Command Prompt window to connect using the MongoDB Shell (mongosh):
+
+1. Connect to Node 1 on port 27018:
+"C:\Users\User\Downloads\mongosh-2.8.3-win32-x64\bin\mongosh.exe" --port 27018
+
+2. Inside the mongosh shell, paste and run this initiation configuration block:
+rs.initiate({
+  _id: "rs0",
+  members: [
+    { _id: 0, host: "localhost:27018", priority: 2 },
+    { _id: 1, host: "localhost:27019", priority: 1 },
+    { _id: 2, host: "localhost:27020", priority: 1 }
+  ]
+})
+
+3. Press Enter. The prompts will transition, and Node 1 will assume the role 
+of PRIMARY. You can verify this by checking:
+rs.status()
+
+--------------------------------------------------------------------------------
+Step 4: Verify Asynchronous Data Replication (Window 5)
+--------------------------------------------------------------------------------
+1. Write test data on the Primary node (within the Window 4 shell):
+use testdb
+db.records.insertOne({ item: "Replication Test", version: "8.2", status: "Active" })
+
+2. Open a fifth Command Prompt window and connect directly to Node 2 (Secondary):
+"C:\Users\User\Downloads\mongosh-2.8.3-win32-x64\bin\mongosh.exe" --port 27019
+
+3. Enable secondary reading and query the data:
+db.getMongo().setReadPref("secondary")
+use testdb
+db.records.find()
+
+The shell will successfully return the replicated document.
+
+--------------------------------------------------------------------------------
+Step 5: Verify Failover and High Availability (Elections)
+--------------------------------------------------------------------------------
+1. Go to Terminal Window 1 (running Node 1 on port 27018) and press Ctrl+C 
+   to simulate a server crash.
+2. Go back to your fifth window (shell connected to port 27019) and press 
+   Enter to refresh the shell.
+3. Observe that the prompt has automatically transitioned to PRIMARY:
+   rs0 [direct: primary] testdb>
+4. Run rs.status() to confirm that Node 2 has been promoted to PRIMARY 
+   following a successful consensus-based election.
+================================================================================
