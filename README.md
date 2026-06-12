@@ -70,7 +70,7 @@ pip install pandas mlxtend scikit-learn pyodbc
 * **Task 2:** Refer to the instructions inside `Task2_Setup.txt` to spin up your three `mongod` nodes and initiate the replica set.
 * **Task 4:** Open SSMS, open `Task4.sql`, and execute the statements. Enable "Include Actual Execution Plan" to observe physical operator changes.
 * **Task 6:** 
-  1. Open SSMS and execute `Task6_Schema.sql` to build and populate the database.
+  1. Open SSMS and execute `Task6.sql` to build and populate the database.
   2. Run the analytical mining script:
      ```bash
      python Task6.py
